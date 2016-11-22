@@ -35,18 +35,22 @@ int main() {
 		}
 
 		cv::cvtColor(imgOriginal, imgHSV, CV_BGR2HSV); //convert the image to HSV color format, input original image, output destination, type of conversion (HSV)
-
+		//cv::namedWindow("imgViewTest", CV_WINDOW_AUTOSIZE);
+		//cv::imshow("imgViewTest", imgHSV);  //Replace imgHSV with any image file you want to see and place imshow() anywhere else in the program to see the progression of the image 
+		//being processed
 		cv::inRange(imgHSV, cv::Scalar(0, 155, 155), cv::Scalar(18, 255, 255), imgThreshLow); //Take all pixels from range (0-18,155-255,155-255) from original HSV image and store in imgThreshLow
 		cv::inRange(imgHSV, cv::Scalar(165, 155, 155), cv::Scalar(179, 255, 255), imgThreshHigh); //Take all pixels from range (165-179,155-255,155-255) from original HSV image and store in imgThreshHigh
-
+		//inRange function creats binary threshHold, (black and white image) showing the pixels that met the color range "threshold" as white" and the 
+		//background as black.  We add the lower end threshhold to the higher end threshhold to create the full picture.  
+		//See http://docs.opencv.org/master/da/d97/tutorial_threshold_inRange.html for more documentation on how in-Range creats the black and white image
 		cv::add(imgThreshLow, imgThreshHigh, imgThresh); //Add the pixels of imgThreshLow and imgThreshHigh together and store in imgThresh (treshold for color detection)
 		
-		cv::GaussianBlur(imgThresh, imgThresh, cv::Size(3, 3), 0); //Perform a guassian blur on the imgThreshold (smooth it out)
+		//cv::GaussianBlur(imgThresh, imgThresh, cv::Size(3, 3), 0); //Perform a guassian blur on the imgThreshold (smooth it out)
 
-		cv::Mat structuringElement = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(3, 3)); //Create "structuring element" for binary mask (making the image straight up black and white)
+		//cv::Mat structuringElement = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(3, 3)); //Create "structuring element" for binary mask (making the image straight up black and white)
 
-		cv::dilate(imgThresh, imgThresh, structuringElement);  
-		cv::erode(imgThresh, imgThresh, structuringElement);
+		//cv::dilate(imgThresh, imgThresh, structuringElement);  
+		//cv::erode(imgThresh, imgThresh, structuringElement);
 
 		// fill circles vector with all circles in processed image
 		cv::HoughCircles(imgThresh,			// input image
@@ -60,7 +64,8 @@ int main() {
 			400);								// max circle radius (any circles with larger radius will not be returned)
 
 		for (int i = 0; i < v3fCircles.size(); i++) {		// for each circle . . .
-															// show ball position x, y, and radius to command line
+														// show ball position x, y, and radius to command line
+			std::cout << "Number of circles = " << v3fCircles.size() << ", ";
 			std::cout << "ball position x = " << v3fCircles[i][0]			// x position of center point of circle
 				<< ", y = " << v3fCircles[i][1]								// y position of center point of circle
 				<< ", radius = " << v3fCircles[i][2] << "\n";				// radius of circle
