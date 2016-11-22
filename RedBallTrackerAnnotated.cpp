@@ -45,12 +45,12 @@ int main() {
 		//See http://docs.opencv.org/master/da/d97/tutorial_threshold_inRange.html for more documentation on how in-Range creats the black and white image
 		cv::add(imgThreshLow, imgThreshHigh, imgThresh); //Add the pixels of imgThreshLow and imgThreshHigh together and store in imgThresh (treshold for color detection)
 		
-		//cv::GaussianBlur(imgThresh, imgThresh, cv::Size(3, 3), 0); //Perform a guassian blur on the imgThreshold (smooth it out)
+		cv::GaussianBlur(imgThresh, imgThresh, cv::Size(3, 3), 0); //Perform a guassian blur on the imgThreshold (smooth it out)
 
-		//cv::Mat structuringElement = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(3, 3)); //Create "structuring element" for binary mask (making the image straight up black and white)
+		cv::Mat structuringElement = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(3, 3)); //Create "structuring element" for binary mask (making the image straight up black and white)
 
-		//cv::dilate(imgThresh, imgThresh, structuringElement);  
-		//cv::erode(imgThresh, imgThresh, structuringElement);
+		cv::dilate(imgThresh, imgThresh, structuringElement);  
+		cv::erode(imgThresh, imgThresh, structuringElement);
 
 		// fill circles vector with all circles in processed image
 		cv::HoughCircles(imgThresh,			// input image
